@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haliç Köprüleri</title>
+<meta name="description" content="Haliç Köprüleri: Fatih ve Beyoğlu ekiplerinin Haliç'e köprü kurmak için yarıştığı 2–4 kişilik kutu oyunu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bevan&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Mate+SC&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="style.css?v=2">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+
+<!-- Masaya bantlanmış etiketler -->
+<nav class="tapes" aria-label="Bölümler">
+  <a class="tape brand" href="#masa">Haliç Köprüleri</a>
+  <a class="tape" href="#gazete">Yarış</a>
+  <a class="tape" href="#tahta">Tahta</a>
+  <a class="tape" href="#kartlar">Kartlar</a>
+  <a class="tape" href="#kurallar">Kurallar</a>
+</nav>
+
+<!-- I. Masa: kupür + kutu -->
+<section class="desk" id="masa">
+  <article class="clipping torn paper-tex" data-seed="3">
+    <header class="clip-head">
+      <span>Haliç Postası</span>
+      <span>Unkapanı · Karaköy</span>
+    </header>
+    <h1>Haliç'e ilk köprüyü hangi yaka kuracak?</h1>
+    <p class="drop">İstanbul, 19. yüzyıl. Fatih ve Beyoğlu yakaları aynı suya köprü atmak için yarışıyor. Kıyı yolundaki iskelelerde işçi ve usta topla, depolardan beton, çelik, taş taşı, Belediye'den izni kap. Lodos esip grev patlarken ekip arkadaşınla planını kur.</p>
+    <p class="kicker">Son parçayı karşı kıyıya ilk koyan ekip Haliç'i bağlar.</p>
+    <ul class="ticket">
+      <li><b>2–4</b>oyuncu</li>
+      <li><b>10+</b>yaş</li>
+      <li><b>45</b>dakika</li>
+    </ul>
+    <a class="typed-link" href="#kurallar">Kuralları oku →</a>
+  </article>
+
+  <div class="box-stage">
+    <div class="box-shadow" aria-hidden="true"></div>
+    <div class="box3d" id="box" role="img" aria-label="Haliç Köprüleri oyun kutusu. Sürükleyerek çevirebilirsiniz.">
+      <div class="face top"><img src="img/figma/kutu-kapak.webp" alt="" draggable="false"></div>
+      <div class="face bottom"><img src="img/figma/kutu-alt.webp" alt="" draggable="false"></div>
+      <div class="face front"><img src="img/figma/kutu-uzun-yan.webp" alt="" draggable="false"></div>
+      <div class="face back"><img src="img/figma/kutu-uzun-yan.webp" alt="" draggable="false"></div>
+      <div class="face right"><img src="img/figma/kutu-kisa-yan.webp" alt="" draggable="false"></div>
+      <div class="face left"><img src="img/figma/kutu-kisa-yan.webp" alt="" draggable="false"></div>
+    </div>
+    <button class="tag" id="flip" type="button">Kutuyu çevir</button>
+    <p class="hint">ya da tutup sürükle</p>
+  </div>
+
+  <!-- masaya saçılmış parçalar -->
+  <img class="loose card-a" src="img/figma/k-lodos.webp" alt="Lodos olay kartı" loading="lazy">
+  <img class="loose card-b" src="img/figma/arka-1.webp" alt="" loading="lazy">
+  <img class="loose card-c" src="img/figma/k-isci.webp" alt="İşçi personel kartı" loading="lazy">
+  <img class="loose tile-a" src="img/figma/p-a1.webp" alt="A1 köprü parçası">
+  <img class="loose tile-b" src="img/figma/p-b5.webp" alt="B5 köprü parçası">
+  <div class="loose die" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <svg class="loose meeple red" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+  <svg class="loose meeple blue" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+</section>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="meeple" viewBox="0 0 100 100">
+      <path d="M50 4c8.5 0 14 6 14 13.5 0 4.6-2 8-4.8 10.6 12.6 2.8 32.8 8.6 32.8 17.4 0 4.9-5.6 6.8-13.4 6l-9.4-1 13.3 38c1.4 4.3-.6 6.5-4.7 6.5H61.6L50 72 38.4 95H22.2c-4.1 0-6.1-2.2-4.7-6.5l13.3-38-9.4 1c-7.8.8-13.4-1.1-13.4-6 0-8.8 20.2-14.6 32.8-17.4C38 25.5 36 22.1 36 17.5 36 10 41.5 4 50 4z" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- II. Gazete sayfası -->
+<section class="newspaper torn paper-tex" id="gazete" data-seed="11">
+  <header class="masthead">
+    <p class="mast-top"><span>Nüsha 1</span><span>Haliç'in iki yakasından haber</span><span>Fiyatı 2 kuruş</span></p>
+    <h2>Haliç Postası</h2>
+    <p class="mast-sub">Unkapanı ile Karaköy arasında · 24 durak · 16 köprü parçası</p>
+  </header>
+
+  <div class="paper-grid">
+    <div class="col">
+      <h3 class="headline">İki yaka, iki ekip, tek su</h3>
+      <p class="byline">Şantiye muhabirimiz bildiriyor</p>
+      <p>Haliç'in güney yakasında <b class="red">Fatih ekibi</b>, Unkapanı Köprüsü'nün sekiz parçasını A1'den A8'e sırayla kuruyor. Şantiyesi 5 numaralı Unkapanı durağında.</p>
+      <p>Kuzey yakada <b class="blue">Beyoğlu ekibi</b> aynı yarışı Galata Köprüsü için B1'den B8'e yürütüyor. Onların şantiyesi 23 numaralı Karaköy'de.</p>
+      <p>Her iki ekip de kıyı yolundaki 24 durakta dolaşıp personel, malzeme ve izin topluyor. Kendi şantiyesinde duran ekip aynı turda iki parça kurabiliyor.</p>
+    </div>
+
+    <figure class="plate">
+      <div class="plate-frame">
+        <canvas id="halic" aria-label="Haliç üzerinde Unkapanı ve Galata köprülerinin parça parça kurulduğu 3D sahne"></canvas>
+        <div class="halftone" aria-hidden="true"></div>
+      </div>
+      <figcaption>
+        <span class="plate-no">Levha I.</span> Boğaz tarafından Haliç'e bakış. Solda Süleymaniye ile Unkapanı Köprüsü, sağda Galata Kulesi ile Galata Köprüsü. Sayfayı kaydırdıkça köprüler parça parça kurulur.
+        <span class="tally"><span class="red">Unkapanı <b id="ta">0</b>/8</span> · <span class="blue">Galata <b id="tb">0</b>/8</span></span>
+      </figcaption>
+    </figure>
+
+    <aside class="col notice">
+      <div class="boxed">
+        <p class="boxed-title">İlan</p>
+        <p>Sekizinci parçayı, yani Karşı Kıyı'yı, yuvasına ilk koyan ekip <b>hemen kazanır</b>. Tur tamamlanmaz, beraberlik olmaz.</p>
+      </div>
+      <h3 class="headline small">Personel yorulur, malzeme harcanır</h3>
+      <p>İnşaatta çalışan İşçi, Usta, Mühendis ve Dalgıç kartları yan çevrilir ve bir sonraki turda dinlenip dikleşir. Beton, çelik, taş ve izin ise harcanıp atılır.</p>
+      <h3 class="headline small">Lodos ve grev</h3>
+      <p>Olay kartları rakibi yavaşlatır: Lodos inşaatı bir tur durdurur, Grev bir işçiyi götürür. Sigorta kartı ise sana oynanan olayı iptal eder.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- III. Tahta -->
+<section class="board-area" id="tahta">
+  <div class="board-wrap">
+    <img class="board" src="img/figma/tahta.webp" alt="Haliç Köprüleri oyun tahtası: Haliç kıyısında 24 durak, iki köprü paftası" loading="lazy">
+    <svg class="on-board meeple red" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+    <svg class="on-board meeple blue" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+  </div>
+  <div class="notes">
+    <div class="note clipped paper-tex" style="--r:-3deg">
+      <p class="note-title">24 durak, 8 tür</p>
+      <ul class="stops">
+        <li style="--c:#E0A030">Depo<span>2 Malzeme çek</span></li>
+        <li style="--c:#EFE6CF">İş İlanı<span>1 Personel al</span></li>
+        <li style="--c:#8C8A84">Lodos<span>1 Olay çek</span></li>
+        <li style="--c:#6E9A45">Pazar<span>Değiş ya da pazarlık et</span></li>
+        <li style="--c:#6B3B5E">Belediye<span>1 İzin al</span></li>
+        <li style="--c:#1F9A98">Vapur<span>Eminönü ↔ Tophane</span></li>
+        <li style="--c:linear-gradient(90deg,#C23B2A 50%,#22479A 50%)">Şantiye<span>Bu tur 2 parça kur</span></li>
+        <li style="--c:repeating-linear-gradient(90deg,#2B2520 0 4px,#F4EAD2 4px 8px)">Geçiş<span>Kayıkla karşıya</span></li>
+      </ul>
+    </div>
+    <div class="note small" style="--r:2.5deg">
+      <p>Hareket: zar at ve o kadar ilerle, ya da elinden 1 kart atıp 1–3 kare git.</p>
+    </div>
+    <div class="note small pink" style="--r:-1.5deg">
+      <p>Pazar'da rakiple bile takas serbest. Sözler bağlayıcı değil.</p>
+    </div>
+  </div>
+</section>
+
+<!-- IV. Kartlar: arşiv dosyası -->
+<section class="folder-area" id="kartlar">
+  <div class="folder">
+    <div class="folder-tabs" role="tablist" aria-label="Desteler">
+      <button role="tab" aria-selected="true" data-deck="personel" id="tab-personel">Personel · 30</button>
+      <button role="tab" aria-selected="false" data-deck="malzeme" id="tab-malzeme">Malzeme · 40</button>
+      <button role="tab" aria-selected="false" data-deck="olay" id="tab-olay">Olay · 14</button>
+      <button role="tab" aria-selected="false" data-deck="izin" id="tab-izin">İzin · 6</button>
+    </div>
+    <div class="folder-body">
+      <div class="folder-label">
+        <p>Dosya no. 03 · Kartlar</p>
+        <p id="deck-note">Personel harcanmaz, yorulur. Kartın üstüne tıkla, arkasını gör.</p>
+      </div>
+      <div class="spread" id="spread" role="tabpanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- V. Kurallar: kitapçık + yardım kartları -->
+<section class="rules-area" id="kurallar">
+  <div class="booklet" id="booklet">
+    <div class="page left"><img id="pl" src="img/figma/kitap-1.webp" alt="Nasıl Oynanır kitapçığı, sayfa 1"></div>
+    <div class="page right"><img src="img/figma/kitap-4.webp" alt="Nasıl Oynanır kitapçığı, sayfa 4"></div>
+    <div class="leaf" id="leaf">
+      <div class="leaf-front"><img src="img/figma/kitap-2.webp" alt="Nasıl Oynanır kitapçığı, sayfa 2"></div>
+      <div class="leaf-back"><img src="img/figma/kitap-3.webp" alt="Nasıl Oynanır kitapçığı, sayfa 3"></div>
+    </div>
+    <div class="spine" aria-hidden="true"></div>
+  </div>
+  <div class="booklet-controls">
+    <button class="tag" id="turn" type="button">Sayfayı çevir →</button>
+    <span class="pager" id="pager">Sayfa 1–2 / 4</span>
+  </div>
+
+  <div class="helpers">
+    <img src="img/figma/yardim-tur.webp" alt="Tur Akışı yardım kartı: Hazırlık, Hareket, Kare, İnşaat, Paylaşım, Sınırlar" loading="lazy" style="--r:-4deg">
+    <img src="img/figma/yardim-parca.webp" alt="Parça Rehberi yardım kartı: sekiz parçanın malzeme ve personel maliyeti" loading="lazy" style="--r:3deg">
+    <div class="tray" aria-label="Köprü parçaları">
+      <p>Her ekibe 8 parça</p>
+      <div class="tray-row" id="tray-a"></div>
+      <div class="tray-row" id="tray-b"></div>
+    </div>
+  </div>
+</section>
+
+<!-- VI. Kütüphane kartı -->
+<footer class="library-card">
+  <p class="lc-title">Haliç Köprüleri</p>
+  <table>
+    <tr><th>Tasarım</th><td>Mustafa Akbaş</td></tr>
+    <tr><th>Ders</th><td>DOT2103 Masaüstü Oyun Tasarımı · 2026</td></tr>
+    <tr><th>Oyuncu</th><td>2–4 · 10+ yaş · 45 dakika</td></tr>
+    <tr><th>Görseller</th><td>Thomas Allom ve Robert Walsh (1836–38), Eugène Flandin (1853), Amedeo Preziosi, Robert Howlett (1857), <i>Illustrated London News</i> (1873), <i>Frank Leslie's Illustrated Newspaper</i> (1883), Library of Congress. Hepsi kamu malıdır, Wikimedia Commons'tan alınmıştır.</td></tr>
+  </table>
+  <p class="lc-stamp">Ders projesi</p>
+</footer>
+
+<script src="content.js?v=2"></script>
+<script type="module" src="scene.js?v=2"></script>
+</body>
+</html>
