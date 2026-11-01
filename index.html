@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bevan&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Mate+SC&family=Special+Elite&display=swap">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=4">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -101,9 +101,26 @@
         <div class="halftone" aria-hidden="true"></div>
       </div>
       <figcaption>
-        <span class="plate-no">Levha I.</span> Boğaz tarafından Haliç'e bakış. Solda Süleymaniye ile Unkapanı Köprüsü, sağda Galata Kulesi ile Galata Köprüsü. Sayfayı kaydırdıkça köprüler parça parça kurulur.
+        <span class="plate-no">Levha I.</span> Boğaz tarafından Haliç'e bakış. Solda Süleymaniye ile Unkapanı Köprüsü, sağda Galata Kulesi ile Galata Köprüsü. Sayfayı kaydırdıkça köprüler parça parça kurulur. Rıhtımlarda her kartın bir karakteri iş başında: aşağıdan birini seç ya da sahnede üstüne tıkla, kamera ona gitsin.
         <span class="tally"><span class="red">Unkapanı <b id="ta">0</b>/8</span> · <span class="blue">Galata <b id="tb">0</b>/8</span></span>
       </figcaption>
+      <nav class="cast" aria-label="Kart karakterleri: birine basınca kamera ona gider">
+        <button type="button" class="cast-all" data-k="" aria-pressed="true"><span class="cast-ico" aria-hidden="true">⌂</span><span class="cast-name">Genel bakış</span></button>
+        <button type="button" data-k="isci" style="--deste:var(--kobalt)"><img src="img/karakter/isci.webp" alt="" width="80" height="100"><span class="cast-name">İşçi</span><small>Personel</small></button>
+        <button type="button" data-k="usta" style="--deste:var(--kobalt)"><img src="img/karakter/usta.webp" alt="" width="80" height="100"><span class="cast-name">Usta</span><small>Personel</small></button>
+        <button type="button" data-k="muhendis" style="--deste:var(--kobalt)"><img src="img/karakter/muhendis.webp" alt="" width="80" height="100"><span class="cast-name">Mühendis</span><small>Personel</small></button>
+        <button type="button" data-k="dalgic" style="--deste:var(--kobalt)"><img src="img/karakter/dalgic.webp" alt="" width="80" height="100"><span class="cast-name">Dalgıç</span><small>Personel</small></button>
+        <button type="button" data-k="beton" style="--deste:var(--safran)"><img src="img/karakter/beton.webp" alt="" width="80" height="100"><span class="cast-name">Beton</span><small>Malzeme</small></button>
+        <button type="button" data-k="celik" style="--deste:var(--safran)"><img src="img/karakter/celik.webp" alt="" width="80" height="100"><span class="cast-name">Çelik</span><small>Malzeme</small></button>
+        <button type="button" data-k="tas" style="--deste:var(--safran)"><img src="img/karakter/tas.webp" alt="" width="80" height="100"><span class="cast-name">Taş</span><small>Malzeme</small></button>
+        <button type="button" data-k="lodos" style="--deste:#6F8796"><img src="img/karakter/lodos.webp" alt="" width="80" height="100"><span class="cast-name">Lodos</span><small>Olay</small></button>
+        <button type="button" data-k="grev" style="--deste:#6F8796"><img src="img/karakter/grev.webp" alt="" width="80" height="100"><span class="cast-name">Grev</span><small>Olay</small></button>
+        <button type="button" data-k="gecikme" style="--deste:#6F8796"><img src="img/karakter/gecikme.webp" alt="" width="80" height="100"><span class="cast-name">Gecikme</span><small>Olay</small></button>
+        <button type="button" data-k="sponsor" style="--deste:#6F8796"><img src="img/karakter/sponsor.webp" alt="" width="80" height="100"><span class="cast-name">Sponsor</span><small>Olay</small></button>
+        <button type="button" data-k="mesai" style="--deste:#6F8796"><img src="img/karakter/mesai.webp" alt="" width="80" height="100"><span class="cast-name">Mesai</span><small>Olay</small></button>
+        <button type="button" data-k="sigorta" style="--deste:#6F8796"><img src="img/karakter/sigorta.webp" alt="" width="80" height="100"><span class="cast-name">Sigorta</span><small>Olay</small></button>
+        <button type="button" data-k="belediye" style="--deste:#6B3B5E"><img src="img/karakter/belediye.webp" alt="" width="80" height="100"><span class="cast-name">Belediye İzni</span><small>İzin</small></button>
+      </nav>
     </figure>
 
     <aside class="col notice">
@@ -208,6 +225,6 @@
 </footer>
 
 <script src="content.js?v=2"></script>
-<script type="module" src="scene.js?v=4"></script>
+<script type="module" src="scene.js?v=12"></script>
 </body>
 </html>

@@ -255,6 +255,201 @@ for (let i = 0; i < 8; i++) {
 order.pop(); // son parçadan önce biri kazanır
 const winner = order[order.length - 1][0];
 
+// Kart karakterleri: her kartın Blender'da yapılmış bir figürü (models/halic_karakterler.glb).
+// Figürler modelde -z'ye bakar; kollar, bacaklar ve üst gövde ayrı düğümdür (kol_sol, kol_sag, bacak_*, ust).
+const CHAR = .24; // sahne birimi / oyuncak-mm (boy ≈ 4,3)
+const CARD = {
+  kr_isci: ["İşçi", "Personel"], kr_usta: ["Usta", "Personel"], kr_muhendis: ["Mühendis", "Personel"], kr_dalgic: ["Dalgıç", "Personel"],
+  kr_beton: ["Beton", "Malzeme"], kr_celik: ["Çelik", "Malzeme"], kr_tas: ["Taş", "Malzeme"],
+  kr_lodos: ["Lodos", "Olay"], kr_grev: ["Grev", "Olay"], kr_gecikme: ["Gecikme", "Olay"], kr_sponsor: ["Sponsor", "Olay"],
+  kr_mesai: ["Mesai", "Olay"], kr_sigorta: ["Sigorta", "Olay"], kr_belediye: ["Belediye İzni", "İzin"],
+};
+const SASH = { a: "#c23b2a", b: "#2c54a8" };
+const actors = [];
+const pickables = [];
+const nodes = (o, prefix) => { const out = []; o.traverse(c => { if (c.name.startsWith(prefix)) out.push(c); }); return out; };
+const node = (o, prefix) => nodes(o, prefix)[0];
+const faceTo = (o, dx, dz) => { o.rotation.y = Math.atan2(-dx, -dz); };
+
+function signTexture(text) {
+  const c = document.createElement("canvas"); c.width = 256; c.height = 128;
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.flipY = false;
+  const draw = () => {
+    const g = c.getContext("2d");
+    g.fillStyle = "#f4ead2"; g.fillRect(0, 0, 256, 128);
+    g.strokeStyle = "#c23b2a"; g.lineWidth = 8; g.strokeRect(8, 8, 240, 112);
+    g.fillStyle = "#2b2520"; g.font = "72px Bevan, Georgia, serif"; g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillText(text, 128, 70);
+    tex.needsUpdate = true;
+  };
+  draw();
+  document.fonts?.load("72px Bevan").then(draw).catch(() => {});
+  return tex;
+}
+
+function spawn(src, { x, z, y = 2, face = [1, 0], team = "a" }) {
+  const o = src.clone(true);
+  o.traverse(m => {
+    if (!m.isMesh) return;
+    m.castShadow = m.receiveShadow = true;
+    if (m.material.name === "k_kusak") { m.material = m.material.clone(); m.material.color.set(SASH[team]); }
+    pickables.push(m);
+  });
+  o.userData.card = CARD[src.name];
+  o.scale.setScalar(CHAR);
+  o.position.set(x, y, z);
+  faceTo(o, ...face);
+  scene.add(o);
+  // animasyon için başlangıç açıları
+  o.traverse(c => { c.userData.rx = c.rotation.x; c.userData.ry = c.rotation.y; c.userData.rz = c.rotation.z; });
+  return o;
+}
+
+// yürüyüş: bacaklar ve (yük taşımıyorsa) kollar karşılıklı sallanır; x ekseninde gidip gelir
+function walker(o, x0, x1, speed, { arms = false, phase = 0 } = {}) {
+  const legs = nodes(o, "bacak"), armsN = arms ? nodes(o, "kol") : [];
+  return t => {
+    const span = Math.abs(x1 - x0), d = ((t * speed + phase) % (2 * span) + 2 * span) % (2 * span);
+    const fwd = d < span, s = fwd ? d : 2 * span - d;
+    o.position.x = x0 + Math.sign(x1 - x0) * s;
+    faceTo(o, fwd === (x1 > x0) ? 1 : -1, 0);
+    const w = Math.sin(t * speed * 9 + phase);
+    legs.forEach(l => { l.rotation.x = l.userData.rx + (l.name.includes("sol") ? w : -w) * .45; });
+    armsN.forEach(a => { a.rotation.x = a.userData.rx + (a.name.includes("sol") ? -w : w) * .35; });
+    o.position.y = o.userData.baseY + Math.abs(w) * .08;
+  };
+}
+
+function cast(chars) {
+  const g = name => chars[name];
+  const add = (name, opts, behave) => {
+    const o = spawn(g(name), opts);
+    o.userData.baseY = o.position.y;
+    // yakın çekim yönü: rıhtımdakilere sudan, sudakilere doğudan bakılır
+    const v = opts.view || (Math.abs(opts.z) < SHORE ? [1, .25] : [.35, -Math.sign(opts.z)]);
+    o.userData.view = new THREE.Vector3(v[0], 0, v[1]).normalize();
+    if (behave) actors.push(behave(o));
+    return o;
+  };
+  // Fatih rıhtımı (güney, +z): hamallar taşı köprüye taşır, usta yontar, mühendis plan yapar
+  add("kr_isci", { x: -55, z: 22.2, team: "a" }, o => walker(o, -58, -35, 2.2));
+  add("kr_isci", { x: -45, z: 23.8, team: "a" }, o => walker(o, -60, -36, 1.9, { phase: 13 }));
+  add("kr_usta", { x: -25.6, z: 21, face: [-.5, -1], team: "a" }, o => {
+    const arm = node(o, "kol_sag");
+    return t => { arm.rotation.x = arm.userData.rx + Math.sin(t * 4.2) * .5; };
+  });
+  add("kr_muhendis", { x: -43, z: 22.6, face: [.45, -1], team: "a" }, o => {
+    const arm = node(o, "kol_sag"), ust = node(o, "ust");
+    return t => { arm.rotation.x = arm.userData.rx + Math.sin(t * 1.3) * .1; ust.rotation.y = ust.userData.ry + Math.sin(t * .6) * .18; };
+  });
+  add("kr_tas", { x: -50, z: 21.6, face: [.3, -1], team: "a" }, o => {
+    const arms = nodes(o, "kol");
+    return t => { const k = Math.sin(t * 3.4); arms.forEach(a => { a.rotation.x = a.userData.rx + k * .55 - .2; }); };
+  });
+  add("kr_sponsor", { x: -14, z: 22.6, face: [.4, -1], team: "a" }, o => t => { o.rotation.y = o.userData.ry + Math.sin(t * .5) * .3; });
+  add("kr_gecikme", { x: 23, z: 21.6, face: [.3, -1], team: "a" }, o => {
+    const foot = node(o, "bacak_sag");
+    return t => { foot.rotation.x = foot.userData.rx + Math.max(0, Math.sin(t * 7)) * .3; };
+  });
+  // suda: dalgıç Unkapanı'nın su ayağında iner çıkar, kayıkçı lodosta sallanır
+  add("kr_dalgic", { x: -26.3, z: 11.6, y: -2.2, face: [1, 0], team: "a" }, o => t => {
+    o.position.y = o.userData.baseY + Math.sin(t * .7) * 1.1;
+    o.rotation.z = Math.sin(t * 1.1) * .05;
+  });
+  add("kr_lodos", { x: -6, z: 5, y: -.2, face: [.2, 1], team: "a" }, o => t => {
+    o.position.x = -6 + Math.sin(t * .05) * 16;
+    o.position.y = o.userData.baseY + Math.sin(t * 1.6) * .3;
+    o.rotation.z = Math.sin(t * 1.7) * .2;
+    o.rotation.x = Math.sin(t * 1.25) * .08;
+  });
+  // Beyoğlu rıhtımı (kuzey, -z): çelik kiriş ve harç köprüye taşınır, grevci oturur, memur mühürler
+  add("kr_celik", { x: 30, z: -22.3, team: "b" }, o => walker(o, 34, 11, 1.6));
+  add("kr_beton", { x: -20, z: -23.6, team: "b" }, o => walker(o, -24, 1, 1.8, { phase: 7 }));
+  add("kr_grev", { x: -9.5, z: -22.6, face: [.4, 1], team: "b" }, o => {
+    const ust = node(o, "ust");
+    return t => { ust.rotation.y = ust.userData.ry + Math.sin(t * .9) * .25; };
+  });
+  add("kr_belediye", { x: -1.5, z: -23.6, face: [.45, 1], team: "b" }, o => {
+    const arm = node(o, "kol_sag");
+    return t => { arm.rotation.x = arm.userData.rx + Math.max(0, Math.sin(t * 2.4)) * .35; };
+  });
+  add("kr_sigorta", { x: 16, z: -24, team: "b" }, o => walker(o, 15, 36, 1.1, { phase: 4 }));
+  const mesai = add("kr_mesai", { x: 11.6, z: -21.3, face: [-.5, 1], team: "b" }, o => {
+    const arm = node(o, "kol_sag");
+    return t => { arm.rotation.z = arm.userData.rz + Math.sin(t * 1.8) * .06; };
+  });
+  // Mesai'nin feneri gerçekten ışık verir
+  const glass = node(mesai, "fener_cam");
+  const lamp = new THREE.PointLight("#ffcf7a", 9, 16, 2);
+  scene.add(lamp);
+  actors.push(() => glass.getWorldPosition(lamp.position));
+  // Grev tabelası
+  const face = node(scene.children.find(c => c.userData.card?.[0] === "Grev"), "tabela_yuz");
+  if (face) face.material = new THREE.MeshStandardMaterial({ map: signTexture("GREV"), roughness: .9 });
+}
+
+new GLTFLoader().load("models/halic_karakterler.glb?v=2", gltf => {
+  const chars = {};
+  gltf.scene.children.forEach(c => { if (CARD[c.name]) chars[c.name] = c; });
+  gltf.scene.traverse(o => { if (o.isMesh) { o.material.flatShading = true; o.material.needsUpdate = true; } });
+  cast(chars);
+  // ?karakter=muhendis: sayfa o karakterin yakın çekimiyle açılır (sunum için)
+  const want = new URLSearchParams(location.search).get("karakter") || pendingKey;
+  if (want) focusKey(want);
+}, undefined, () => {});
+
+// Karakterin üstüne gelince hangi kart olduğunu söyle
+const tip = document.createElement("div");
+tip.className = "char-tip";
+tip.hidden = true;
+canvas.parentElement.appendChild(tip);
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(e) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  let o = ray.intersectObjects(pickables, false)[0]?.object;
+  while (o && !o.userData.card) o = o.parent;
+  return o || null;
+}
+canvas.addEventListener("pointermove", e => {
+  const o = pick(e);
+  canvas.style.cursor = o ? "zoom-in" : "";
+  if (!o) { tip.hidden = true; return; }
+  const r = canvas.getBoundingClientRect();
+  tip.innerHTML = `<b>${o.userData.card[0]}</b><span>${o.userData.card[1]} kartı</span>`;
+  tip.style.left = `${e.clientX - r.left + 14}px`;
+  tip.style.top = `${e.clientY - r.top + 10}px`;
+  tip.hidden = false;
+});
+canvas.addEventListener("pointerleave", () => { tip.hidden = true; });
+
+// Karaktere tıklayınca kamera ona yaklaşır; boşluğa tıklayınca ya da Esc ile geri döner
+let focus = null, lastFocus = null, focusMix = 0, pendingKey = null;
+const castBar = document.querySelector(".cast");
+const keyOf = o => Object.keys(CARD).find(k => CARD[k] === o?.userData.card)?.slice(3) || "";
+function syncCast() {
+  const k = focus ? keyOf(focus) : "";
+  castBar?.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
+}
+function focusKey(k) {
+  if (!k) { focus = null; syncCast(); return; }
+  const hit = scene.children.find(c => c.userData.card && CARD["kr_" + k] === c.userData.card);
+  if (!hit) { pendingKey = k; return; } // karakterler henüz yüklenmedi
+  focus = lastFocus = hit;
+  syncCast();
+}
+canvas.addEventListener("click", e => { focus = pick(e); if (focus) lastFocus = focus; syncCast(); });
+addEventListener("keydown", e => { if (e.key === "Escape") { focus = null; syncCast(); } });
+// Alttaki mini karakter şeridi: basınca kamera o karaktere gider
+castBar?.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  focusKey(b.dataset.k);
+  canvas.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+});
+const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), fPos = new THREE.Vector3(), fDir = new THREE.Vector3();
+
 // Vapur
 const ferry = new THREE.Group();
 {
@@ -380,6 +575,8 @@ function frame() {
     if (b.position.x > 60) b.position.x = -120; if (b.position.x < -120) b.position.x = 60;
   });
 
+  if (!reduce) actors.forEach(a => a(t));
+
   gulls.forEach(g => {
     const u = g.userData, a = t * u.s + u.p;
     g.position.set(u.cx + Math.cos(a) * u.r, u.h + Math.sin(t * 2 + u.p) * .6, Math.sin(a) * u.r * .6);
@@ -389,12 +586,23 @@ function frame() {
 
   // Kamera: Boğaz'dan Haliç'e doğru yaklaşır
   const p = ease(progress);
-  camera.position.set(
+  camPos.set(
     86 - p * 26 + mouse.x * 3,
     40 - p * 12 - mouse.y * 2,
     20 - p * 22 + mouse.x * 2
   );
-  camera.lookAt(-14 - p * 4, 0 + p * 1.5, -2 + p * 4);
+  camLook.set(-14 - p * 4, 0 + p * 1.5, -2 + p * 4);
+  // seçilen karaktere yakın çekim
+  focusMix += ((focus ? 1 : 0) - focusMix) * (reduce ? 1 : .06);
+  if (lastFocus && focusMix > .001) {
+    lastFocus.getWorldPosition(fPos);
+    fDir.copy(lastFocus.userData.view);
+    const k = ease(Math.min(1, focusMix));
+    camPos.lerp(fDir.multiplyScalar(9.5).add(fPos).setY(fPos.y + 7), k);
+    camLook.lerp(fPos.setY(fPos.y + 2), k);
+  }
+  camera.position.copy(camPos);
+  camera.lookAt(camLook);
 
   renderer.render(scene, camera);
 }
