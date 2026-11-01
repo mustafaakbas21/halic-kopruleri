@@ -1,6 +1,7 @@
 // 3D Haliç sahnesi. Kamera Boğaz tarafından Haliç'e bakar: solda Fatih (güney, +z), sağda Beyoğlu (kuzey, -z).
 // Unkapanı Köprüsü (Fatih, kırmızı) güneyden, Galata Köprüsü (Beyoğlu, mavi) kuzeyden kurulur.
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const canvas = document.getElementById("halic");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -148,9 +149,24 @@ mosque({ x: -95, z: SHORE + 30, base: 9, r: 4, minarets: [[-6, -6, 14], [6, -6, 
   scene.add(g);
 }
 
-// Köprüler
+// Köprüler: oyunun 3D baskı parçaları (Blender, models/halic_parcalar.glb, mm; taban 14×14 mm)
 const SEG = (2 * SHORE + 2) / 8; // parça uzunluğu
 const KINDS = ["Kıyı Ayağı", "Su Ayağı", "Kiriş", "Kiriş", "Orta Açıklık", "Kiriş", "Su Ayağı", "Karşı Kıyı"];
+const MODEL_OF = { "Kıyı Ayağı": "kiyi_ayagi", "Su Ayağı": "su_ayagi", "Kiriş": "kiris", "Orta Açıklık": "orta_aciklik", "Karşı Kıyı": "karsi_kiyi" };
+const MM = SEG / 14;   // sahne birimi / mm: 14 mm'lik parça bir köprü bölmesini doldurur
+const BASE_Y = -.3;    // taban plakası su çizgisinde
+// Baskı plastiği: kamera güneşe karşı baktığından takım renkleri biraz açık tutulur
+const PLA = { a: M("#d4513c", { roughness: .55 }), b: M("#4d78cf", { roughness: .55 }) };
+function modelPiece(i, teamMat, geos, startSide) {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(geos[MODEL_OF[KINDS[i]]], teamMat);
+  m.scale.setScalar(MM);
+  m.rotation.y = startSide * Math.PI / 2; // modelde köprü +x yönünde uzanır, sahnede karşı kıyıya (z) döner
+  m.castShadow = m.receiveShadow = true;
+  g.add(m);
+  return g;
+}
+// Yedek: model dosyası yüklenemezse basit parçalar
 function makePiece(i, teamMat) {
   const g = new THREE.Group();
   const kind = KINDS[i];
@@ -190,23 +206,45 @@ function makePiece(i, teamMat) {
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   return g;
 }
-function bridge(x, startSide, teamMat) {
+function bridge(x, startSide, teamMat, geos) {
   // startSide = +1: güney kıyıdan başlar, -1: kuzey kıyıdan başlar
   const pieces = [];
   for (let i = 0; i < 8; i++) {
-    const p = makePiece(i, teamMat);
+    const p = geos ? modelPiece(i, teamMat, geos, startSide) : makePiece(i, teamMat);
     const z = startSide * (SHORE + 1 - SEG * (i + .5));
-    p.position.set(x, 0, z);
-    p.userData = { baseY: 0, t: 0 };
+    const baseY = geos ? BASE_Y : 0;
+    p.position.set(x, baseY, z);
+    p.userData = { baseY, t: 0 };
     p.visible = false;
     scene.add(p);
     pieces.push(p);
   }
   return pieces;
 }
+// Hamal piyonları kendi şantiyelerinin rıhtımında bekler (Unkapanı ve Karaköy)
+function pawns(geo, mat, x, z) {
+  for (const [dx, turn] of [[-4.6, .35], [4.6, -.35]]) {
+    const m = new THREE.Mesh(geo, mat);
+    m.scale.setScalar(MM);
+    m.position.set(x + dx, 2, z);
+    m.rotation.y = -Math.PI / 2 + turn; // yüzü Boğaz'a, kameraya dönük
+    m.castShadow = m.receiveShadow = true;
+    scene.add(m);
+  }
+}
 // Unkapanı: güney (+z) kıyıdan kuzeye; Galata: kuzey (-z) kıyıdan güneye
-const bridgeA = bridge(-30, 1, MAT.kirmizi);
-const bridgeB = bridge(6, -1, MAT.kobalt);
+let bridgeA = [], bridgeB = [];
+new GLTFLoader().load("models/halic_parcalar.glb", gltf => {
+  const geos = {};
+  gltf.scene.traverse(o => { if (o.isMesh) geos[o.name] = o.geometry; });
+  bridgeA = bridge(-30, 1, PLA.a, geos);
+  bridgeB = bridge(6, -1, PLA.b, geos);
+  pawns(geos.piyon, PLA.a, -30, SHORE + 3);
+  pawns(geos.piyon, PLA.b, 6, -(SHORE + 3));
+}, undefined, () => {
+  bridgeA = bridge(-30, 1, MAT.kirmizi);
+  bridgeB = bridge(6, -1, MAT.kobalt);
+});
 
 // Kurulum sırası: ekipler sırayla, başlayan ekip her ziyarette değişir
 const firstA = Math.random() < .5;
@@ -309,16 +347,16 @@ function frame() {
 
   // Köprü parçaları: ilk ikisi hazır, gerisi kaydırmayla
   const counts = { a: 0, b: 0 };
-  order.forEach(([team, i], k) => {
+  if (bridgeA.length) order.forEach(([team, i], k) => {
     const start = k < 2 ? -1 : .04 + (k - 2) / (order.length - 2) * .82;
     const local = Math.max(0, Math.min(1, (progress - start) / .05));
     const piece = (team === "a" ? bridgeA : bridgeB)[i];
     piece.visible = local > 0;
-    piece.position.y = (1 - ease(local)) * 9;
+    piece.position.y = piece.userData.baseY + (1 - ease(local)) * 9;
     piece.rotation.z = (1 - ease(local)) * (team === "a" ? .25 : -.25);
     if (local >= 1) counts[team]++;
   });
-  if (counts.a !== lastCount.a || counts.b !== lastCount.b) {
+  if (bridgeA.length && (counts.a !== lastCount.a || counts.b !== lastCount.b)) {
     lastCount = counts;
     dispatchEvent(new CustomEvent("bridge-progress", { detail: { ...counts, winner } }));
   }
