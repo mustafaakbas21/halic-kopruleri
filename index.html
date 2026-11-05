@@ -4,11 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Haliç Köprüleri</title>
-<meta name="description" content="Haliç Köprüleri: Fatih ve Beyoğlu ekiplerinin Haliç'e köprü kurmak için yarıştığı 2–4 kişilik kutu oyunu.">
+<meta name="description" content="Haliç Köprüleri: Fatih ve Beyoğlu ekiplerinin Haliç'e köprü kurmak için yarıştığı 2–4 kişilik kutu oyunu. 16 sayfalık kural kitapçığı, kartlar, tahta ve dijital sürüm.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="img/logo/simge.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/logo/apple-touch-icon.png">
+<meta property="og:image" content="img/logo/amblem.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bevan&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Mate+SC&family=Special+Elite&display=swap">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=9">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -20,11 +24,12 @@
 
 <!-- Masaya bantlanmış etiketler -->
 <nav class="tapes" aria-label="Bölümler">
-  <a class="tape brand" href="#masa">Haliç Köprüleri</a>
+  <a class="brand" href="#masa"><img src="img/logo/amblem-1x.webp" srcset="img/logo/amblem-1x.webp 1x, img/logo/amblem.webp 2x" alt="Haliç Köprüleri" width="653" height="572"></a>
   <a class="tape" href="#gazete">Yarış</a>
   <a class="tape" href="#tahta">Tahta</a>
   <a class="tape" href="#kartlar">Kartlar</a>
-  <a class="tape" href="#kurallar">Kurallar</a>
+  <a class="tape" href="#kitapcik">Kitapçık</a>
+  <a class="tape" href="#dijital">Dijital</a>
 </nav>
 
 <!-- I. Masa: kupür + kutu -->
@@ -42,7 +47,7 @@
       <li><b>10+</b>yaş</li>
       <li><b>45</b>dakika</li>
     </ul>
-    <a class="typed-link" href="#kurallar">Kuralları oku →</a>
+    <a class="typed-link" href="#kitapcik">Kural kitapçığını aç →</a>
   </article>
 
   <div class="box-stage">
@@ -60,6 +65,9 @@
   </div>
 
   <!-- masaya saçılmış parçalar -->
+  <a class="loose booklet-loose" href="#kitapcik" aria-label="Kural kitapçığı, 16 sayfa: kitapçık bölümüne git">
+    <img src="img/kitapcik/k01-1x.webp" alt="" width="592" height="840">
+  </a>
   <img class="loose card-a" src="img/figma/k-lodos.webp" alt="Lodos olay kartı" loading="lazy">
   <img class="loose card-b" src="img/figma/arka-1.webp" alt="" loading="lazy">
   <img class="loose card-c" src="img/figma/k-isci.webp" alt="İşçi personel kartı" loading="lazy">
@@ -92,7 +100,7 @@
       <p class="byline">Şantiye muhabirimiz bildiriyor</p>
       <p>Haliç'in güney yakasında <b class="red">Fatih ekibi</b>, Unkapanı Köprüsü'nün sekiz parçasını A1'den A8'e sırayla kuruyor. Şantiyesi 5 numaralı Unkapanı durağında.</p>
       <p>Kuzey yakada <b class="blue">Beyoğlu ekibi</b> aynı yarışı Galata Köprüsü için B1'den B8'e yürütüyor. Onların şantiyesi 23 numaralı Karaköy'de.</p>
-      <p>Her iki ekip de kıyı yolundaki 24 durakta dolaşıp personel, malzeme ve izin topluyor. Kendi şantiyesinde duran ekip aynı turda iki parça kurabiliyor.</p>
+      <p>Her iki ekip de kıyı yolundaki 24 durakta dolaşıp personel, malzeme ve izin topluyor. Parçalar 1'den 8'e sırayla kuruluyor; kendi şantiyesinde duran oyuncu aynı turda iki parça kurabiliyor.</p>
     </div>
 
     <figure class="plate">
@@ -129,36 +137,39 @@
         <p>Sekizinci parçayı, yani Karşı Kıyı'yı, yuvasına ilk koyan ekip <b>hemen kazanır</b>. Tur tamamlanmaz, beraberlik olmaz.</p>
       </div>
       <h3 class="headline small">Personel yorulur, malzeme harcanır</h3>
-      <p>İnşaatta çalışan İşçi, Usta, Mühendis ve Dalgıç kartları yan çevrilir ve bir sonraki turda dinlenip dikleşir. Beton, çelik, taş ve izin ise harcanıp atılır.</p>
+      <p>İnşaatta çalışan İşçi, Usta, Mühendis ve Dalgıç kartları yan çevrilir; sahibinin bir sonraki turunun başında dinlenip dikleşir. Beton, Çelik, Taş ve Belediye İzni ise elden harcanıp atılır.</p>
       <h3 class="headline small">Lodos ve grev</h3>
-      <p>Olay kartları rakibi yavaşlatır: Lodos inşaatı bir tur durdurur, Grev bir işçiyi götürür. Sigorta kartı ise sana oynanan olayı iptal eder.</p>
+      <p>Olay kartları rakibi yavaşlatır: Lodos rakip ekibin sıradaki inşaatını durdurur, Grev bir İşçi'yi götürür, Gecikme iki Malzeme attırır. Sigorta ise sana oynanan olayı, sıra sende olmasa da iptal eder.</p>
     </aside>
   </div>
 </section>
 
 <!-- III. Tahta -->
 <section class="board-area" id="tahta">
-  <div class="board-wrap">
-    <img class="board" src="img/figma/tahta.webp" alt="Haliç Köprüleri oyun tahtası: Haliç kıyısında 24 durak, iki köprü paftası" loading="lazy">
-    <svg class="on-board meeple red" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
-    <svg class="on-board meeple blue" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+  <div class="felt">
+    <div class="board-wrap">
+      <img class="board" src="img/figma/tahta.webp" alt="Haliç Köprüleri oyun tahtası: Haliç kıyısında 24 durak, iki köprü paftası" loading="lazy">
+      <svg class="on-board meeple red" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+      <svg class="on-board meeple blue" viewBox="0 0 100 100" aria-hidden="true"><use href="#meeple"/></svg>
+    </div>
   </div>
   <div class="notes">
     <div class="note clipped paper-tex" style="--r:-3deg">
       <p class="note-title">24 durak, 8 tür</p>
+      <p class="note-sub">Yalnız hareketin bittiği durak çalışır.</p>
       <ul class="stops">
-        <li style="--c:#E0A030">Depo<span>2 Malzeme çek</span></li>
-        <li style="--c:#EFE6CF">İş İlanı<span>1 Personel al</span></li>
-        <li style="--c:#8C8A84">Lodos<span>1 Olay çek</span></li>
-        <li style="--c:#6E9A45">Pazar<span>Değiş ya da pazarlık et</span></li>
-        <li style="--c:#6B3B5E">Belediye<span>1 İzin al</span></li>
-        <li style="--c:#1F9A98">Vapur<span>Eminönü ↔ Tophane</span></li>
-        <li style="--c:linear-gradient(90deg,#C23B2A 50%,#22479A 50%)">Şantiye<span>Bu tur 2 parça kur</span></li>
-        <li style="--c:repeating-linear-gradient(90deg,#2B2520 0 4px,#F4EAD2 4px 8px)">Geçiş<span>Kayıkla karşıya</span></li>
+        <li style="--c:#E0A030">Depo<span>2 Malzeme çek</span><em>2 · 6 · 10 · 14 · 16 · 22</em></li>
+        <li style="--c:#EFE6CF">İş İlanı<span>1 Personel çek</span><em>3 · 8 · 15 · 20</em></li>
+        <li style="--c:#8C8A84">Lodos<span>1 Olay çek</span><em>4 · 9 · 13 · 19</em></li>
+        <li style="--c:#6E9A45">Pazar<span>2 kart değiş ya da takas et</span><em>12 · 17</em></li>
+        <li style="--c:#6B3B5E">Belediye<span>1 Belediye İzni al</span><em>11 · 21</em></li>
+        <li style="--c:#1F9A98">Vapur<span>Öbür Vapur'a geç</span><em>1 Eminönü ↔ 24 Tophane</em></li>
+        <li style="--c:linear-gradient(90deg,#C23B2A 50%,#22479A 50%)">Şantiye<span>Kendininkinde 2 parça</span><em>5 Fatih · 23 Beyoğlu</em></li>
+        <li style="--c:repeating-linear-gradient(90deg,#2B2520 0 4px,#F4EAD2 4px 8px)">Geçiş<span>Kayıkla öbür Geçiş'e</span><em>7 Fatih ↔ 18 Beyoğlu</em></li>
       </ul>
     </div>
     <div class="note small" style="--r:2.5deg">
-      <p>Hareket: zar at ve o kadar ilerle, ya da elinden 1 kart atıp 1–3 kare git.</p>
+      <p>Hareket zorunlu: zarı at, tam o kadar ilerle; ya da elinden 1 kart atıp 1–3 kare git. Yolun ucundan öteye gidilmez; sayı seni uçtan öteye götürüyorsa öbür yöne gidersin.</p>
     </div>
     <div class="note small pink" style="--r:-1.5deg">
       <p>Pazar'da rakiple bile takas serbest. Sözler bağlayıcı değil.</p>
@@ -185,20 +196,36 @@
   </div>
 </section>
 
-<!-- V. Kurallar: kitapçık + yardım kartları -->
-<section class="rules-area" id="kurallar">
-  <div class="booklet" id="booklet">
-    <div class="page left"><img id="pl" src="img/figma/kitap-1.webp" alt="Nasıl Oynanır kitapçığı, sayfa 1"></div>
-    <div class="page right"><img src="img/figma/kitap-4.webp" alt="Nasıl Oynanır kitapçığı, sayfa 4"></div>
-    <div class="leaf" id="leaf">
-      <div class="leaf-front"><img src="img/figma/kitap-2.webp" alt="Nasıl Oynanır kitapçığı, sayfa 2"></div>
-      <div class="leaf-back"><img src="img/figma/kitap-3.webp" alt="Nasıl Oynanır kitapçığı, sayfa 3"></div>
+<!-- V. Kitapçık: 16 sayfalık kural kitapçığı + yardım kartları -->
+<section class="rules-area" id="kitapcik" aria-labelledby="kitapcik-baslik">
+  <span id="kurallar" class="anchor-alias" aria-hidden="true"></span>
+  <header class="rules-head">
+    <h2 class="dymo" id="kitapcik-baslik">Kural kitapçığı</h2>
+    <p class="rules-hint">16 sayfa · A5 · tel dikiş. <span class="hint-wide">Sağ sayfaya tıkla, sayfa çevrilsin; renkli işaretler bölümlere götürür.</span><span class="hint-narrow">Sayfayı yana kaydır ya da sağına dokun; renkli işaretler bölümlere götürür.</span></p>
+  </header>
+
+  <nav class="book-index" id="book-index" aria-label="Kitapçık bölümleri"></nav>
+
+  <div class="book-stage">
+    <div class="book closed-front" id="book" tabindex="0" role="group" aria-roledescription="kitapçık"
+         aria-label="Kural kitapçığı. Ok tuşlarıyla sayfa çevrilir, Enter büyüterek açar.">
+      <span class="book-block l" aria-hidden="true"></span>
+      <span class="book-block r" aria-hidden="true"></span>
+      <span class="staples" aria-hidden="true"><i></i><i></i></span>
     </div>
-    <div class="spine" aria-hidden="true"></div>
+    <div class="book-single" id="book-single">
+      <img src="img/kitapcik/k01-1x.webp" width="592" height="840" alt="Kural kitapçığı, sayfa 1: Kapak" draggable="false">
+    </div>
   </div>
-  <div class="booklet-controls">
-    <button class="tag" id="turn" type="button">Sayfayı çevir →</button>
-    <span class="pager" id="pager">Sayfa 1–2 / 4</span>
+
+  <div class="book-controls">
+    <button class="tag" id="book-prev" type="button" disabled>← Geri</button>
+    <p class="pager" id="book-pager" aria-live="polite"><b>Kapak</b><small>16 sayfa</small></p>
+    <button class="tag" id="book-next" type="button">İleri →</button>
+  </div>
+  <div class="book-actions">
+    <button class="tag" id="book-read" type="button">Büyüterek oku</button>
+    <a class="tag" href="img/kitapcik/Halic_Kopruleri_Kural_Kitapcigi.pdf" download>PDF indir · 4,4 MB</a>
   </div>
 
   <div class="helpers">
@@ -212,19 +239,68 @@
   </div>
 </section>
 
-<!-- VI. Kütüphane kartı -->
+<!-- VI. Dijital sürüm: Unity ekranlarının baskıları + fotoğrafçı zarfı -->
+<section class="digital-area" id="dijital" aria-labelledby="dijital-baslik">
+  <div class="prints">
+    <figure class="print print-a">
+      <button class="shot" type="button" data-shot="0" aria-label="Büyüt: oyun ekranı, Hareket adımı">
+        <img src="img/dijital/oyun-800.webp" srcset="img/dijital/oyun-800.webp 800w, img/dijital/oyun.webp 1600w" sizes="(max-width: 1100px) 92vw, 680px" width="800" height="450" loading="lazy"
+             alt="Unity sürümünde oyun ekranı: yeşil çuhanın üstünde tahta, solda Fatih, sağda Beyoğlu panosu, altta eldeki kartlar, ZAR ve KARTLA GİT düğmeleri">
+      </button>
+      <figcaption>Hareket adımı · ZAR ya da KARTLA GİT</figcaption>
+    </figure>
+    <figure class="print print-b">
+      <button class="shot" type="button" data-shot="1" aria-label="Büyüt: ana menü">
+        <img src="img/dijital/menu-800.webp" srcset="img/dijital/menu-800.webp 800w, img/dijital/menu.webp 1600w" sizes="(max-width: 1100px) 70vw, 380px" width="800" height="450" loading="lazy"
+             alt="Unity sürümünün ana menüsü: solda amblemli menü, sağda çuhanın üstünde oyun kutusu">
+      </button>
+      <figcaption>Ana menü · kutu masada</figcaption>
+    </figure>
+  </div>
+  <div class="envelope">
+    <p class="env-brand">Foto Haliç</p>
+    <p class="env-sub">Banyo · Baskı · Büyütme</p>
+    <div class="env-label">
+      <h2 id="dijital-baslik">Dijital sürüm</h2>
+      <p>Kutudaki oyunun Unity 6 ile yapılan bilgisayar sürümü. Kurallar kitapçıktakilerle aynı; tahta, kartlar ve kutu aynı Figma tasarımlarından geliyor.</p>
+      <ul>
+        <li>2–4 oyuncu: her koltukta bir kişi ya da bilgisayar</li>
+        <li>Bilgisayar rakipler üç seviyede: Kolay, Normal, Zor</li>
+        <li>Adım adım rehber ipuçları ve 9 sayfalık Nasıl Oynanır</li>
+        <li>Windows · ses ve müzikle</li>
+      </ul>
+    </div>
+    <p class="env-foot">Adet: 2 · Fotoğraflara tıkla, büyüsün.</p>
+  </div>
+</section>
+
+<!-- VII. Kütüphane kartı -->
 <footer class="library-card">
-  <p class="lc-title">Haliç Köprüleri</p>
+  <p class="lc-title"><img src="img/logo/amblem-1x.webp" alt="Haliç Köprüleri" width="653" height="572" loading="lazy"></p>
   <table>
     <tr><th>Tasarım</th><td>Mustafa Akbaş</td></tr>
     <tr><th>Ders</th><td>DOT2103 Masaüstü Oyun Tasarımı · 2026</td></tr>
     <tr><th>Oyuncu</th><td>2–4 · 10+ yaş · 45 dakika</td></tr>
+    <tr><th>Kutuda</th><td>A3 tahta, 16 köprü parçası, 4 hamal piyonu, 90 kart, 4 yardım kartı, 1 zar, 16 sayfalık kural kitapçığı</td></tr>
     <tr><th>Görseller</th><td>Thomas Allom ve Robert Walsh (1836–38), Eugène Flandin (1853), Amedeo Preziosi, Robert Howlett (1857), <i>Illustrated London News</i> (1873), <i>Frank Leslie's Illustrated Newspaper</i> (1883), Library of Congress. Hepsi kamu malıdır, Wikimedia Commons'tan alınmıştır.</td></tr>
+    <tr><th>Harita</th><td>Tahtadaki harita verisi © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap katkıcıları</a> (ODbL)</td></tr>
+    <tr><th>Yazı</th><td>Bevan, Alegreya, Mate (SIL Open Font License) · Special Elite (Apache 2.0)</td></tr>
   </table>
   <p class="lc-stamp">Ders projesi</p>
 </footer>
 
-<script src="content.js?v=2"></script>
+<!-- Büyüteç: kitapçık sayfaları ve fotoğraflar için -->
+<dialog class="viewer" id="viewer" aria-label="Büyük görünüm">
+  <div class="viewer-body">
+    <div class="viewer-stage" id="viewer-stage"></div>
+    <p class="viewer-cap" id="viewer-cap"></p>
+  </div>
+  <button class="viewer-btn viewer-x" type="button" id="viewer-x" aria-label="Kapat">×</button>
+  <button class="viewer-btn viewer-prev" type="button" id="viewer-prev" aria-label="Önceki">‹</button>
+  <button class="viewer-btn viewer-next" type="button" id="viewer-next" aria-label="Sonraki">›</button>
+</dialog>
+
+<script src="content.js?v=4"></script>
 <script type="module" src="scene.js?v=12"></script>
 </body>
 </html>
